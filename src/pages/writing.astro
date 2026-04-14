@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const posts = [
+	{
+		title: 'Where Ambient Documentation Actually Saves Time',
+		summary:
+			'A practical look at where note automation helps clinicians and where review burden still dominates.',
+		tag: 'Documentation',
+	},
+	{
+		title: 'A Simple Framework For Evaluating Clinical AI Tools',
+		summary:
+			'Questions to ask before procurement: workflow fit, failure modes, review load, and governance.',
+		tag: 'Evaluation',
+	},
+	{
+		title: 'Why Most Healthcare AI Pilots Stall After The Demo',
+		summary:
+			'Adoption usually breaks on operations, ownership, and integration details rather than model quality alone.',
+		tag: 'Operations',
+	},
+];
+---
+
+<Layout
+	title="Writing | HealthAI Notes"
+	description="Writing index for HealthAI Notes covering documentation, workflow, and AI governance."
+>
+	<main class="page">
+		<section class="page-section">
+			<p class="eyebrow">Writing</p>
+			<h1>Current themes and draft article directions.</h1>
+			<p class="lede">
+				This is a starter index, not a full publishing system yet. It gives the site shape now and
+				can later be replaced with Astro content collections or markdown posts.
+			</p>
+		</section>
+
+		<section class="grid">
+			{
+				posts.map((post) => (
+					<article class="card">
+						<span>{post.tag}</span>
+						<h2>{post.title}</h2>
+						<p class="muted">{post.summary}</p>
+					</article>
+				))
+			}
+		</section>
+	</main>
+</Layout>
