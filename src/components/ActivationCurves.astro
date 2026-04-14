@@ -1,0 +1,103 @@
+---
+const curves = [
+	{
+		id: 'sigmoid',
+		label: 'Sigmoid',
+		color: '#d66c2f',
+		path: 'M30 170 C70 170, 95 165, 118 148 S158 108, 200 100 S242 92, 282 52 S330 30, 370 30',
+	},
+	{
+		id: 'relu',
+		label: 'ReLU',
+		color: '#2f6b5f',
+		path: 'M30 170 L200 170 L370 30',
+	},
+	{
+		id: 'gelu',
+		label: 'GELU',
+		color: '#5d5fef',
+		path: 'M30 172 C88 171, 108 170, 132 163 S170 135, 196 101 S236 62, 275 45 S326 34, 370 30',
+	},
+];
+---
+
+<figure class="diagram">
+	<svg viewBox="0 0 400 220" role="img" aria-labelledby="activation-curves-title">
+		<title id="activation-curves-title">Comparison of sigmoid, ReLU, and GELU activation curves</title>
+		<defs>
+			<marker
+				id="arrow"
+				viewBox="0 0 10 10"
+				refX="8"
+				refY="5"
+				markerWidth="6"
+				markerHeight="6"
+				orient="auto-start-reverse"
+			>
+				<path d="M0 0 L10 5 L0 10 z" fill="rgba(22, 33, 29, 0.55)"></path>
+			</marker>
+		</defs>
+
+		<rect x="0" y="0" width="400" height="220" rx="24" fill="rgba(255, 251, 245, 0.9)"></rect>
+		<path d="M30 190 H375" stroke="rgba(22, 33, 29, 0.22)" stroke-width="2" marker-end="url(#arrow)"></path>
+		<path d="M200 195 V20" stroke="rgba(22, 33, 29, 0.22)" stroke-width="2" marker-end="url(#arrow)"></path>
+		<text x="360" y="208" class="axis-label">x</text>
+		<text x="210" y="24" class="axis-label">y</text>
+
+		{
+			curves.map((curve) => (
+				<g>
+					<path
+						d={curve.path}
+						fill="none"
+						stroke={curve.color}
+						stroke-width="6"
+						stroke-linecap="round"
+						opacity="0.96"
+					></path>
+				</g>
+			))
+		}
+
+		<g class="legend">
+			{
+				curves.map((curve, index) => (
+					<g transform={`translate(36 ${34 + index * 22})`}>
+						<rect width="14" height="14" rx="4" fill={curve.color}></rect>
+						<text x="22" y="12">{curve.label}</text>
+					</g>
+				))
+			}
+		</g>
+	</svg>
+	<figcaption>
+		Sigmoid compresses to a bounded S-curve, ReLU hard-clips negatives to zero, and GELU applies a
+		smoother gating behavior.
+	</figcaption>
+</figure>
+
+<style>
+	.diagram {
+		margin: 2rem 0;
+	}
+
+	svg {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	.axis-label,
+	.legend text {
+		font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+		font-size: 12px;
+		fill: rgba(22, 33, 29, 0.75);
+	}
+
+	figcaption {
+		margin-top: 0.8rem;
+		color: var(--muted);
+		font-size: 0.95rem;
+		line-height: 1.6;
+	}
+</style>

@@ -1,36 +1,10 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
-const posts = [
-	{
-		title: 'Sigmoid, ReLU, GELU, And Other Activation Terms',
-		summary:
-			'A practical introduction to the activation functions and terminology that show up constantly in neural networks.',
-		tag: 'ML Basics',
-		href: '/writing/activation-functions/',
-	},
-	{
-		title: 'Where Ambient Documentation Actually Saves Time',
-		summary:
-			'A practical look at where note automation helps clinicians and where review burden still dominates.',
-		tag: 'Documentation',
-		href: '#',
-	},
-	{
-		title: 'A Simple Framework For Evaluating Clinical AI Tools',
-		summary:
-			'Questions to ask before procurement: workflow fit, failure modes, review load, and governance.',
-		tag: 'Evaluation',
-		href: '#',
-	},
-	{
-		title: 'Why Most Healthcare AI Pilots Stall After The Demo',
-		summary:
-			'Adoption usually breaks on operations, ownership, and integration details rather than model quality alone.',
-		tag: 'Operations',
-		href: '#',
-	},
-];
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
 ---
 
 <Layout
@@ -40,10 +14,10 @@ const posts = [
 	<main class="page">
 		<section class="page-section">
 			<p class="eyebrow">Writing</p>
-			<h1>Current themes and draft article directions.</h1>
+			<h1>Published notes and essays.</h1>
 			<p class="lede">
-				This is a starter index, not a full publishing system yet. It gives the site shape now and
-				can later be replaced with Astro content collections or markdown posts.
+				The writing section now runs from Markdown posts in an Astro content collection, so new
+				pieces can be added without hand-editing route files.
 			</p>
 		</section>
 
@@ -51,13 +25,12 @@ const posts = [
 			{
 				posts.map((post) => (
 					<article class="card">
-						<span>{post.tag}</span>
-						<h2>{post.title}</h2>
-						<p class="muted">{post.summary}</p>
+						<span>{post.data.heroTag}</span>
+						<h2>{post.data.title}</h2>
+						<p class="muted">{post.data.description}</p>
+						<p class="muted">Published {post.data.pubDate.toLocaleDateString('en-US')}</p>
 						<div class="actions">
-							<a class:list={{ primary: post.href !== '#', secondary: post.href === '#' }} href={post.href}>
-								{post.href !== '#' ? 'Read Post' : 'Draft Topic'}
-							</a>
+							<a class="primary" href={`/writing/${post.id}/`}>Read Post</a>
 						</div>
 					</article>
 				))
