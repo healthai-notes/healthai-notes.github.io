@@ -3,22 +3,32 @@ import Layout from '../layouts/Layout.astro';
 
 const posts = [
 	{
+		title: 'Sigmoid, ReLU, GELU, And Other Activation Terms',
+		summary:
+			'A practical introduction to the activation functions and terminology that show up constantly in neural networks.',
+		tag: 'ML Basics',
+		href: '/writing/activation-functions/',
+	},
+	{
 		title: 'Where Ambient Documentation Actually Saves Time',
 		summary:
 			'A practical look at where note automation helps clinicians and where review burden still dominates.',
 		tag: 'Documentation',
+		href: '#',
 	},
 	{
 		title: 'A Simple Framework For Evaluating Clinical AI Tools',
 		summary:
 			'Questions to ask before procurement: workflow fit, failure modes, review load, and governance.',
 		tag: 'Evaluation',
+		href: '#',
 	},
 	{
 		title: 'Why Most Healthcare AI Pilots Stall After The Demo',
 		summary:
 			'Adoption usually breaks on operations, ownership, and integration details rather than model quality alone.',
 		tag: 'Operations',
+		href: '#',
 	},
 ];
 ---
@@ -44,6 +54,11 @@ const posts = [
 						<span>{post.tag}</span>
 						<h2>{post.title}</h2>
 						<p class="muted">{post.summary}</p>
+						<div class="actions">
+							<a class:list={{ primary: post.href !== '#', secondary: post.href === '#' }} href={post.href}>
+								{post.href !== '#' ? 'Read Post' : 'Draft Topic'}
+							</a>
+						</div>
 					</article>
 				))
 			}

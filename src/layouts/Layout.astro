@@ -181,7 +181,8 @@ const navItems = [
 	.hero,
 	.card,
 	.feature,
-	.page-section {
+	.page-section,
+	.article-shell {
 		backdrop-filter: blur(18px);
 		background: var(--panel);
 		border: 1px solid var(--line);
@@ -265,9 +266,66 @@ const navItems = [
 
 	.card,
 	.page-section,
-	.feature {
+	.feature,
+	.article-shell {
 		padding: 24px;
 		border-radius: 24px;
+	}
+
+	.article-shell {
+		max-width: 820px;
+		margin: 0 auto;
+	}
+
+	.article-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		margin: 0 0 16px;
+		font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+		font-size: 0.9rem;
+		color: var(--muted);
+	}
+
+	.prose {
+		font-size: 1.06rem;
+	}
+
+	.prose h2,
+	.prose h3 {
+		margin-top: 2rem;
+	}
+
+	.prose p,
+	.prose li {
+		color: var(--ink);
+		line-height: 1.8;
+	}
+
+	.prose ul {
+		padding-left: 1.25rem;
+	}
+
+	.prose code {
+		padding: 0.15rem 0.35rem;
+		border-radius: 0.35rem;
+		background: rgba(22, 33, 29, 0.08);
+		font-size: 0.95em;
+	}
+
+	.prose table {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 1.5rem 0;
+		font-size: 0.98rem;
+	}
+
+	.prose th,
+	.prose td {
+		padding: 0.8rem;
+		border-bottom: 1px solid var(--line);
+		text-align: left;
+		vertical-align: top;
 	}
 
 	.card span,

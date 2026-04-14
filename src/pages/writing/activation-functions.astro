@@ -1,0 +1,196 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+	title="Sigmoid, ReLU, GELU, And Other Activation Terms | HealthAI Notes"
+	description="An introduction to sigmoid, ReLU, GELU, tanh, softmax, and the surrounding terminology used in neural networks."
+>
+	<main class="page">
+		<article class="article-shell">
+			<p class="eyebrow">ML Basics</p>
+			<h1>Sigmoid, ReLU, GELU, and the terms people keep throwing around</h1>
+			<div class="article-meta">
+				<span>Introductory post</span>
+				<span>Neural networks</span>
+				<span>Readable without heavy math</span>
+			</div>
+
+			<div class="prose">
+				<p class="lede">
+					If you are new to neural networks, activation-function vocabulary can sound more
+					complicated than it is. Terms like <code>sigmoid</code>, <code>ReLU</code>,
+					<code>GELU</code>, and <code>softmax</code> are mostly names for different ways a model
+					transforms a number before passing it deeper into the network.
+				</p>
+
+				<p>
+					The short version is this: a linear stack of layers is still just a linear function. To
+					make neural networks learn more interesting patterns, each layer needs a
+					<strong>nonlinearity</strong>. That nonlinearity is usually introduced by an
+					<strong>activation function</strong>.
+				</p>
+
+				<h2>The core idea: what an activation function does</h2>
+				<p>
+					A neuron or hidden unit first computes a weighted sum such as
+					<code>w1x1 + w2x2 + b</code>. The activation function then transforms that intermediate
+					value. Different activations change how strongly the neuron responds, how gradients flow
+					during training, and how easy the network is to optimize.
+				</p>
+
+				<table>
+					<thead>
+						<tr>
+							<th>Term</th>
+							<th>Main idea</th>
+							<th>Where it commonly shows up</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>sigmoid</code></td>
+							<td>Squeezes values into the range 0 to 1</td>
+							<td>Binary output probabilities, older hidden layers</td>
+						</tr>
+						<tr>
+							<td><code>tanh</code></td>
+							<td>Squeezes values into the range -1 to 1</td>
+							<td>Older recurrent nets, some hidden layers</td>
+						</tr>
+						<tr>
+							<td><code>ReLU</code></td>
+							<td>Outputs 0 for negatives and stays linear for positives</td>
+							<td>Default hidden-layer choice in many networks</td>
+						</tr>
+						<tr>
+							<td><code>GELU</code></td>
+							<td>Smoothly gates values instead of hard-cutting them</td>
+							<td>Transformers and many modern large models</td>
+						</tr>
+						<tr>
+							<td><code>softmax</code></td>
+							<td>Turns a vector into a probability distribution</td>
+							<td>Multi-class output layers</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h2>Sigmoid</h2>
+				<p>
+					The sigmoid function maps any real number to a value between 0 and 1. That makes it
+					intuitive when you want to interpret a model output as a probability, especially for
+					binary classification.
+				</p>
+				<ul>
+					<li>Useful when the output means “how likely is class 1?”</li>
+					<li>Easy to interpret because the range is bounded</li>
+					<li>Less common in deep hidden layers because gradients can get very small</li>
+				</ul>
+				<p>
+					That last issue is part of the <strong>vanishing gradient</strong> problem. When the
+					function saturates near 0 or 1, its slope becomes tiny, so backpropagation carries only a
+					weak training signal.
+				</p>
+
+				<h2>Tanh</h2>
+				<p>
+					<code>tanh</code> is similar in shape to sigmoid but centered around zero, with outputs in
+					the range -1 to 1. Zero-centered activations can make optimization easier than sigmoid in
+					some settings, which is why tanh historically replaced sigmoid in many hidden layers.
+				</p>
+				<p>
+					Even so, tanh can still suffer from vanishing gradients when values land in the flat
+					parts of the curve.
+				</p>
+
+				<h2>ReLU</h2>
+				<p>
+					ReLU stands for <strong>Rectified Linear Unit</strong>. It is conceptually simple:
+					negative values become 0, positive values pass through unchanged.
+				</p>
+				<ul>
+					<li>Cheap to compute</li>
+					<li>Helps optimization in deep networks compared with sigmoid or tanh</li>
+					<li>Introduces sparsity because many activations become exactly 0</li>
+				</ul>
+				<p>
+					The main drawback is the <strong>dying ReLU</strong> problem. If a neuron falls into a
+					regime where it outputs 0 for almost everything, it may stop learning effectively because
+					its gradient is also 0 on the negative side.
+				</p>
+
+				<h2>Leaky ReLU and related variants</h2>
+				<p>
+					To soften ReLU’s hard zeroing behavior, people use variants such as
+					<code>Leaky ReLU</code>, <code>PReLU</code>, and <code>ELU</code>.
+				</p>
+				<ul>
+					<li><code>Leaky ReLU</code> keeps a small negative slope instead of returning exact zeros</li>
+					<li><code>PReLU</code> learns that negative slope during training</li>
+					<li><code>ELU</code> and similar functions smooth the negative region further</li>
+				</ul>
+				<p>
+					These variants exist mostly to preserve the practical benefits of ReLU while reducing the
+					risk of inactive neurons.
+				</p>
+
+				<h2>GELU</h2>
+				<p>
+					GELU stands for <strong>Gaussian Error Linear Unit</strong>. Instead of sharply clipping
+					all negative values like ReLU, GELU scales inputs more smoothly. In practice, you can
+					think of it as letting values through in a graded way rather than making a hard on/off
+					decision.
+				</p>
+				<p>
+					This smoother behavior is one reason GELU became common in transformer architectures and
+					large language models. You do not usually choose GELU because it is easier to explain;
+					you choose it because empirically it works well in modern deep architectures.
+				</p>
+
+				<h2>Softmax is related, but slightly different</h2>
+				<p>
+					People often mention <code>softmax</code> in the same breath, but it usually plays a
+					different role. Sigmoid, ReLU, tanh, and GELU are commonly used inside the network.
+					Softmax is typically used at the output layer for multi-class classification.
+				</p>
+				<p>
+					If a model must choose among several classes, softmax converts raw scores into numbers
+					that sum to 1. That is why it is commonly paired with cross-entropy loss.
+				</p>
+
+				<h2>Other relevant terminology</h2>
+				<ul>
+					<li><strong>Activation</strong>: the output of a neuron after applying the activation function</li>
+					<li><strong>Logit</strong>: a raw model score before sigmoid or softmax</li>
+					<li><strong>Nonlinearity</strong>: any transformation that prevents the network from collapsing into one linear map</li>
+					<li><strong>Backpropagation</strong>: the algorithm used to send gradient information backward through the network</li>
+					<li><strong>Gradient</strong>: how much a parameter should change to reduce loss</li>
+					<li><strong>Saturation</strong>: a region where changing the input barely changes the output</li>
+					<li><strong>Vanishing gradient</strong>: gradients become too small to train early layers well</li>
+				</ul>
+
+				<h2>Which one should you remember first?</h2>
+				<p>If you only want a practical mental model, remember this:</p>
+				<ul>
+					<li>Use <code>sigmoid</code> to think about binary probabilities</li>
+					<li>Use <code>softmax</code> to think about multi-class probabilities</li>
+					<li>Use <code>ReLU</code> as the classic default hidden-layer activation</li>
+					<li>Use <code>GELU</code> as the smoother activation you will often see in transformers</li>
+				</ul>
+
+				<h2>Bottom line</h2>
+				<p>
+					These terms are not four unrelated inventions. They are different answers to the same
+					question: <em>how should a network transform intermediate values so it can learn useful,
+					nonlinear behavior and still train well?</em>
+				</p>
+				<p>
+					Once that framing is clear, the vocabulary becomes much less intimidating. The names are
+					just labels for tradeoffs between interpretability, smoothness, stability, and training
+					dynamics.
+				</p>
+			</div>
+		</article>
+	</main>
+</Layout>
